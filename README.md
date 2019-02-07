@@ -67,7 +67,7 @@ Radius of Curvature and Centre Offset is shown in the output video as
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-
+<img src="output_images/final_image.png" width="480" alt="Combined Image" />
 
 ### Pipeline (video)
 
