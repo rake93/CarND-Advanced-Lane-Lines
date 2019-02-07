@@ -50,27 +50,30 @@ After applying perspective transform, here is how binary image and test image lo
 
 #### 4. Describe how (and identify where in your code) you identified lane-line pixels and fit their positions with a polynomial?
 
-Then I did some other stuff and fit my lane lines with a 2nd order polynomial kinda like this:
+I then performed a sliding window search on the bottom half (as lanes are in bottom half portion throughout) of the binary image obtained in above step, starting with the base likely positions of the 2 lanes, calculated from the histogram. I have used 9 windows of width 100 pixels. Here is the Histogram image as shown below.
+<img src="output_images/histogram_updated_image.png" width="480" alt="Combined Image" />
 
-![alt text][image5]
+The x & y coordinates of non zeros pixels are found, a polynomial is fit for these coordinates and the lane lines are drawn.
+<img src="output_images/final_image.png" width="480" alt="Combined Image" />
 
 #### 5. Describe how (and identify where in your code) you calculated the radius of curvature of the lane and the position of the vehicle with respect to center.
 
-I did this in lines # through # in my code in `my_other_file.py`
+I calculated radius of curvature inside function measure_curvature. Mathematical formula I used for calculation of radius of curvature is:
+## f(y)=Ay^2+By+C
+Also, I calculated centre offset inside function measure_centre_offset by calculating distance between centre of lane and centre of image.
+
+Radius of Curvature and Centre Offset is shown in the output video as
+<img src="output_images/final_image.png" width="480" alt="Combined Image" />
 
 #### 6. Provide an example image of your result plotted back down onto the road such that the lane area is identified clearly.
 
-I implemented this step in lines # through # in my code in `yet_another_file.py` in the function `map_lane()`.  Here is an example of my result on a test image:
 
-![alt text][image6]
-
----
 
 ### Pipeline (video)
 
-#### 1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (wobbly lines are ok but no catastrophic failures that would cause the car to drive off the road!).
+#### 1. Provide a link to my final video output.
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./output_videos/project_video_output.mp4)
 
 ---
 
@@ -78,4 +81,12 @@ Here's a [link to my video result](./project_video.mp4)
 
 #### 1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+#### 1. Points of failure & Areas of Improvement
+Improvements required:
+
+If there are sharp turns, then perspective transform will keep some of the lane pixels out of the histogram image and thus lane lines cannot be drawn accurately. So improving the logic of getting histogram image with all the lane pixels after perspective transform may help.
+Improvement in bit mask extraction for detection of lane pixels which are not bright (white).
+Checking if radius of curvature of the two polynomials is almost same or not.
+Failures:
+
+The pipeline seems to fail for the harder challenge video. This video has sharper turns and at very short intervals. Maybe, polynomials of higher degree (maybe 3) can help in drawing lane lines. In this case, calculation of radius of curvature will be difficult due to complexity involved in calculating derivative of the polynomial.
